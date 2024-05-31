@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Área de Terreno</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  input[type="number"] {
+    width: 100px;
+    padding: 5px;
+    margin-right: 10px;
+  }
+  button {
+    padding: 7px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Calculadora de Área de Terreno</h2>
+  <p>Ingresa las dimensiones del terreno en metros:</p>
+  <label for="base">Base:</label>
+  <input type="number" id="base" min="0" step="0.01" required>
+  <label for="altura">Altura:</label>
+  <input type="number" id="altura" min="0" step="0.01" required>
+  <button onclick="calcularArea()">Calcular Área</button>
+  <p id="resultado"></p>
+</div>
+
+<script>
+  function calcularArea() {
+    var base = parseFloat(document.getElementById("base").value);
+    var altura = parseFloat(document.getElementById("altura").value);
+
+    if (isNaN(base) || isNaN(altura)) {
+      alert("Por favor ingresa valores numéricos válidos.");
+      return;
+    }
+
+    var area = (base * altura) / 2;
+    document.getElementById("resultado").innerText = "El área del terreno es: " + area.toFixed(2) + " metros cuadrados.";
+  }
+</script>
+</body>
+</html>

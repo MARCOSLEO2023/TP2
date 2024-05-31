@@ -1,0 +1,7 @@
+frutas
+narnaja
+manzana
+
+verduras
+lechuga
+cebolla

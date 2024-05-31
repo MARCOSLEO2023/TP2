@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Listado de personas</title>
+  <style>
+    h1 {
+      background-color: darkgoldenrod;
+      width:150px;
+    }
+    .completed {
+      color: rgb(23, 166, 40);
+    }
+    .pending {
+      color: red;
+    }
+    button {
+      cursor:default;
+      background-color: rgb(40, 215, 43);
+      font-family: 'Courier New', Courier, monospace;
+    
+    
+    }
+  </style>
+</head>
+<body>
+  <h1>Listado de personas</h1>
+  <button id="mostrar">Mostrar personas</button>
+  <ul id="listado"></ul>
+
+  <script>
+    const listado = document.getElementById("listado");
+    const mostrar = document.getElementById("mostrar");
+
+    mostrar.addEventListener("click", async () => {
+      const res = await fetch("https://jsonplaceholder.typicode.com/users");
+      if (res.ok) {
+        console.log("llegaron los datos!");
+
+        const personas = await res.json();
+        personas.forEach((persona) => {
+          const item = document.createElement("li");
+          item.innerHTML = `
+            ${persona.id} - ${persona.name} - ${persona.username} - ${persona.email} - ${persona.website}
+            <button class="ver-tareas" data-user-id="${persona.id}">Ver tareas</button>
+            <ul class="tareas" id="tareas-${persona.id}" style="display:none;"></ul>
+          `;
+          listado.appendChild(item);
+        });
+
+        document.querySelectorAll(".ver-tareas").forEach(button => {
+          button.addEventListener("click", async (e) => {
+            const userId = e.target.getAttribute("data-user-id");
+            const tareasList = document.getElementById(`tareas-${userId}`);
+
+            if (tareasList.style.display === "none") {
+              const tareasRes = await fetch(`https://jsonplaceholder.typicode.com/todos?userId=${userId}`);
+              if (tareasRes.ok) {
+                const tareas = await tareasRes.json();
+                tareasList.innerHTML = "";
+                tareas.forEach((tarea) => {
+                  const tareaItem = document.createElement("li");
+                  tareaItem.textContent = tarea.title;
+                  tareaItem.className = tarea.completed ? "completed" : "pending";
+                  tareasList.appendChild(tareaItem);
+                });
+                tareasList.style.display = "block";
+              } else {
+                console.error("Error: no llegaron las tareas");
+              }
+            } else {
+              tareasList.style.display = "none";
+            }
+          });
+        });
+      } else {
+        console.error("Error: no llegaron los datos");
+      }
+    });
+  </script>
+</body>
+</html>
